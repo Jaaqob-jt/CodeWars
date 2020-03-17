@@ -7,7 +7,7 @@ namespace CodeWars
     {
         static void Main(string[] args)
         {
-            string s = Kata.reverseAndCombineText("abc def ghi jkl");
+
         }
     }
 }
