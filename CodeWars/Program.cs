@@ -7,7 +7,7 @@ namespace CodeWars
     {
         static void Main(string[] args)
         {
-
+            Console.WriteLine("Welcome to my Code Wars Katas Repo!");
         }
     }
 }
