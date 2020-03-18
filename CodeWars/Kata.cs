@@ -36,6 +36,23 @@ namespace CodeWars
         }
 
         #region PassedKata
+        public static string[] dirReduc(String[] arr)
+        {
+            List<string> directions = new List<string>(arr);
+            Dictionary<string, string> dirs = new Dictionary<string, string> { { "SOUTH", "NORTH" }, { "NORTH", "SOUTH" }, { "EAST", "WEST" }, { "WEST", "EAST" } };
+            bool flag = true;
+
+            while (flag)
+            {
+                for (int i = 0; i < directions.Count - 1; i++)
+                {
+                    try { if (dirs[directions[i]] == directions[i + 1]) { directions[i] = "-"; directions[i + 1] = "-"; } } catch { }
+                }
+                flag = directions.Contains("-");
+                directions.RemoveAll(x => x == "-");
+            }
+            return directions.ToArray();
+        }
         public static string reverseAndCombineText(string text)
         {
             List<string> sentence = new List<string>();
