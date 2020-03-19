@@ -7,7 +7,20 @@ namespace CodeWars
 
     class Kata
     {
-
+        public static int Solve(string s)
+        {
+            StringBuilder text = new StringBuilder();
+            List<char> strList = new List<char>{'a', 'e', 'i', 'o', 'u', 'y'};
+            foreach (char item in s) if (char.IsLetter(item) && strList.Contains(item)) { text.Append('-'); } else text.Append(item);
+            foreach (string element in s.Split('-', StringSplitOptions.RemoveEmptyEntries))
+            {
+                foreach (char item in element)
+                {
+                    int i = char.ToUpper(item) - 64;        // do zaimplementowania. Formuła na potem, tutaj chyba zbędna
+                }
+            }
+            return 0;
+        }
 
         public static int[] nbMonths(int startPriceOld, int startPriceNew, int savingPerMonth, double percentLossByMonth)
         {
@@ -36,6 +49,8 @@ namespace CodeWars
         }
 
         #region PassedKata
+
+        public static bool Hero(int bullets, int dragons) => bullets >= dragons * 2 ? true : false;
         public static string reverseAndCombineText(string text)
         {
             List<string> sentence = new List<string>();
