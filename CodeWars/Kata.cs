@@ -7,20 +7,46 @@ namespace CodeWars
 
     class Kata
     {
-        public static int Solve(string s)
+        public static int RectangleRotation(int y, int x)
         {
-            StringBuilder text = new StringBuilder();
-            List<char> strList = new List<char>{'a', 'e', 'i', 'o', 'u', 'y'};
-            foreach (char item in s) if (char.IsLetter(item) && strList.Contains(item)) { text.Append('-'); } else text.Append(item);
-            foreach (string element in s.Split('-', StringSplitOptions.RemoveEmptyEntries))
+            int result = 0;
+            double ang = Math.PI * -45 / 180;
+
+            Tuple<double, double>[] orgCords = {
+            new Tuple<double, double>(    -x / 2,     -y / 2),    // Lower left
+            new Tuple<double, double>(    -x / 2,     y / 2),     // Upper Left
+            new Tuple<double, double>(    x / 2,      y / 2),     // Upper right
+            new Tuple<double, double>(    x / 2,      -y / 2)     // Lower right
+            };
+
+            Tuple<double, double>[] newCords = {
+            new Tuple<double, double>(orgCords[0].Item1*Math.Cos(ang) - orgCords[0].Item2*Math.Sin(ang),     orgCords[0].Item1*Math.Sin(ang) + orgCords[0].Item2*Math.Cos(ang)),
+            new Tuple<double, double>(orgCords[1].Item1*Math.Cos(ang) - orgCords[1].Item2*Math.Sin(ang),     orgCords[1].Item1*Math.Sin(ang) + orgCords[1].Item2*Math.Cos(ang)),
+            new Tuple<double, double>(orgCords[2].Item1*Math.Cos(ang) - orgCords[2].Item2*Math.Sin(ang),     orgCords[2].Item1*Math.Sin(ang) + orgCords[2].Item2*Math.Cos(ang)),
+            new Tuple<double, double>(orgCords[3].Item1*Math.Cos(ang) - orgCords[3].Item2*Math.Sin(ang),     orgCords[3].Item1*Math.Sin(ang) + orgCords[3].Item2*Math.Cos(ang)) 
+            };
+
+            for (int i = 0; i < 4; i++)             // Debugging
             {
-                foreach (char item in element)
-                {
-                    int i = char.ToUpper(item) - 64;        // do zaimplementowania. Formuła na potem, tutaj chyba zbędna
-                }
+                Console.WriteLine($"Original pair x, y = {orgCords[i].Item1}, {orgCords[i].Item2}\n\t New pair x, y = {newCords[i].Item1}, {newCords[i].Item2}");
             }
-            return 0;
+
+
+            for (int xCount = (int)newCords[0].Item1 - 1; xCount < (int)newCords[2].Item1 + 1; xCount++)
+            {
+                for (int yCount = (int)newCords[3].Item1 - 1; yCount < (int)newCords[1].Item1 + 1; yCount++)
+                {
+
+
+
+
+                }
+
+            }
+
+            return result;
         }
+
 
         public static int[] nbMonths(int startPriceOld, int startPriceNew, int savingPerMonth, double percentLossByMonth)
         {
@@ -49,6 +75,55 @@ namespace CodeWars
         }
 
         #region PassedKata
+        public static string StripComments(string text, string[] commentSymbols)
+        {
+            List<string> linesOfText = new List<string>();
+            StringBuilder result = new StringBuilder();
+            linesOfText.AddRange(text.Split("\n", StringSplitOptions.None));
+
+            for (int item = 0; item < linesOfText.Count; item++)
+            {
+                foreach (var splitter in commentSymbols)
+                {
+                    try
+                    {
+                        linesOfText[item] = linesOfText[item].Remove(linesOfText[item].IndexOf(splitter)).TrimEnd();
+                    }
+                    catch
+                    {
+                        linesOfText[item] = linesOfText[item].TrimEnd();
+                    }
+                }
+                if (item == linesOfText.Count - 1)
+                {
+                    result.Append(linesOfText[item]);
+                }
+                else
+                {
+                    result.AppendLine(linesOfText[item]);
+                }
+            }
+            return result.ToString();
+        }
+        public static int Solve(string s)
+        {
+            StringBuilder text = new StringBuilder();
+            List<char> vowels = new List<char> { 'a', 'e', 'i', 'o', 'u' };
+            List<int> results = new List<int>();
+            int index = 0;
+
+            foreach (char item in s)
+                if (char.IsLetter(item) && !vowels.Contains(item)) text.Append(item); else text.Append('-');
+
+            foreach (string element in text.ToString().Split('-', StringSplitOptions.RemoveEmptyEntries))
+            {
+                results.Add(0);
+                foreach (char item in element) results[index] += (char.ToUpper(item) - 64);
+                index++;
+            }
+            results.Sort();
+            try { return results[index - 1]; } catch { return 0; }
+        }
         public static string[] dirReduc(String[] arr)
         {
             List<string> directions = new List<string>(arr);
@@ -66,7 +141,6 @@ namespace CodeWars
             }
             return directions.ToArray();
         }
-
         public static bool Hero(int bullets, int dragons) => bullets >= dragons * 2 ? true : false;
         public static string reverseAndCombineText(string text)
         {
