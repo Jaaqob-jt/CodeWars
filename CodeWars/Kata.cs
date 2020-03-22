@@ -7,74 +7,192 @@ namespace CodeWars
 
     class Kata
     {
-        public static int RectangleRotation(int y, int x)
+
+        public static int[] Snail(int[][] array)
         {
-            int result = 0;
-            double ang = Math.PI * -45 / 180;
+            int[] result = new int[array.Length * array.Length];
+            int arrInd = 0;
 
-            Tuple<double, double>[] orgCords = {
-            new Tuple<double, double>(    -x / 2,     -y / 2),    // Lower left
-            new Tuple<double, double>(    -x / 2,     y / 2),     // Upper Left
-            new Tuple<double, double>(    x / 2,      y / 2),     // Upper right
-            new Tuple<double, double>(    x / 2,      -y / 2)     // Lower right
-            };
+            array[0].CopyTo(result, arrInd);
+            arrInd = array.Length;
 
-            Tuple<double, double>[] newCords = {
-            new Tuple<double, double>(orgCords[0].Item1*Math.Cos(ang) - orgCords[0].Item2*Math.Sin(ang),     orgCords[0].Item1*Math.Sin(ang) + orgCords[0].Item2*Math.Cos(ang)),
-            new Tuple<double, double>(orgCords[1].Item1*Math.Cos(ang) - orgCords[1].Item2*Math.Sin(ang),     orgCords[1].Item1*Math.Sin(ang) + orgCords[1].Item2*Math.Cos(ang)),
-            new Tuple<double, double>(orgCords[2].Item1*Math.Cos(ang) - orgCords[2].Item2*Math.Sin(ang),     orgCords[2].Item1*Math.Sin(ang) + orgCords[2].Item2*Math.Cos(ang)),
-            new Tuple<double, double>(orgCords[3].Item1*Math.Cos(ang) - orgCords[3].Item2*Math.Sin(ang),     orgCords[3].Item1*Math.Sin(ang) + orgCords[3].Item2*Math.Cos(ang)) 
-            };
+            int[] tempArray = new int[array.Length];
+            array[^1].CopyTo(tempArray, 0);
+            Array.Reverse(tempArray);
 
-            for (int i = 0; i < 4; i++)             // Debugging
+
+            if (array.Length > 1)
             {
-                Console.WriteLine($"Original pair x, y = {orgCords[i].Item1}, {orgCords[i].Item2}\n\t New pair x, y = {newCords[i].Item1}, {newCords[i].Item2}");
-            }
-
-
-            for (int xCount = (int)newCords[0].Item1 - 1; xCount < (int)newCords[2].Item1 + 1; xCount++)
-            {
-                for (int yCount = (int)newCords[3].Item1 - 1; yCount < (int)newCords[1].Item1 + 1; yCount++)
+                for (int i = 1; i < array.Length - 1; i++)
                 {
-
-
-
-
+                    Console.WriteLine($"-- In Loop -- {array[^1][i]} ");
+                    result[arrInd] = array[i][array.Length - 1];
+                    arrInd++;
                 }
-
             }
 
+            tempArray.CopyTo(result, arrInd);
+            arrInd += tempArray.Length;
+            Console.WriteLine($"Array index is: {arrInd}");
+
+            if (array.Length > 1)
+            {
+                for (int i = array.Length - 2; i > 0 ; i--)
+                {
+                    Console.WriteLine($"-- In Loop -- {array[^1][i]} ");
+                    result[arrInd] = array[i][0];
+                    arrInd++;
+                }
+            }
+
+            // TU TRZEBA ZAIMPLEMENTOWAĆ REKURENCJĘ I WRZUCANIE MAŁEJ TABLICY 
+            int[][] passArray = new int[array.Length - 2][];
+            try
+            {
+
+                for (int item = 0; item < passArray.Length; item++)
+                {
+                    Array.Copy(array[item + 1], 1, passArray[item], 0, passArray.Length);
+                }
+                Console.WriteLine("Gora Try'a");
+                Array.Copy(Snail(passArray), result, passArray.Length * passArray.Length);
+
+
+            } catch
+            {
+                if (array.Length % 2 == 1)
+                {
+                    result[arrInd] = array[1][1];
+                    Console.WriteLine("a moze bylem nizej");
+                }
+                
+            }
+
+            foreach (var item in result)
+            {
+                Console.Write($"{item.ToString()} | ");
+            }
             return result;
         }
 
 
-        public static int[] nbMonths(int startPriceOld, int startPriceNew, int savingPerMonth, double percentLossByMonth)
+
+
+        public static string StringFunc(string s, long x)
         {
-            int[] result = new int[2] { 0 , 0 };
-            double cars = (startPriceNew - startPriceOld);
-            double monnies = cars;
 
-            while (true)
+            // This is working and returning good values, but! input data is to big to process this way. Need to optimize.
+
+
+            StringBuilder result = new StringBuilder();
+            string text = s;
+            long step = 0;
+            Console.WriteLine($"Step: {step} \t= {text}");
+            List<string> possibilities = new List<string>();
+
+            while (step < x)
             {
-                if (result[0]%2==0)
-                {
-                    percentLossByMonth += 0.5;
-                }
-                cars = cars * percentLossByMonth/100;
-                monnies = monnies - cars - savingPerMonth;
+                char[] ordered = text.ToCharArray();
+                char[] reversed = text.ToCharArray();
+                Array.Reverse(reversed);
 
-                if (monnies < 0)
+                    for (int i = 0; i < s.Length / 2; i++)
+                    {
+                        result.Append(reversed[i]);
+                        result.Append(ordered[i]);
+                    }
+
+                    if (text.Length % 2 == 1) result.Append(reversed[text.Length / 2]);
+                    
+                step++;
+                text = result.ToString();
+                possibilities.Add(text);
+                Console.WriteLine($"Step: {step} \t= {text}");
+
+                if (step < x)
                 {
-                    result[1] = (int)-monnies;
+                    result.Clear();
+                }
+                if (s == text && x != 0 )
+                {
+                    text = possibilities[(int)(x % step)];
                     break;
                 }
-                result[0] += 1;
             }
-
-            return result;
+            return text;
+        }
+        public static int[] nbMonths(int startPriceOld, int startPriceNew, int savingPerMonth, double percentLossByMonth)
+        {
+            return null;
         }
 
         #region PassedKata
+        public static int RectangleRotation(int y, int x)
+        {
+            double more = Math.Ceiling(y / Math.Sqrt(2)) * Math.Ceiling(x / Math.Sqrt(2)) + Math.Floor(y / Math.Sqrt(2)) * Math.Floor(x / Math.Sqrt(2));
+            double less = Math.Ceiling(y / Math.Sqrt(2)) * Math.Floor(x / Math.Sqrt(2)) + Math.Floor(y / Math.Sqrt(2)) * Math.Ceiling(x / Math.Sqrt(2));
+
+            double factorX = (x / 2) / Math.Sqrt(2);
+            double factorY = (y / 2) / Math.Sqrt(2);
+
+            Console.WriteLine($"x = {factorX}, y = {factorY}");
+
+            if (factorX - Math.Floor(factorX) < 0.5)
+            {
+                if (factorY - Math.Floor(factorY) < 0.5)
+                {
+                    Console.WriteLine("Option 1");
+                    return (int)more;
+                }
+                else
+                {
+                    Console.WriteLine("Option 2");
+                    return (int)less;
+                }
+
+            }
+            else
+            {
+                if (factorY - Math.Floor(factorY) > 0.5)
+                {
+                    Console.WriteLine("Option 3");
+                    return (int)more;
+                }
+                else
+                {
+                    Console.WriteLine("Option 4");
+                    return (int)less;
+                }
+            }
+        }
+        public static String funReverse(String s)
+        {
+            StringBuilder result = new StringBuilder();
+            char[] ordered = s.ToCharArray();       // 012345
+            char[] reversed = s.ToCharArray();      // 543210
+            Array.Reverse(reversed);
+
+            for (int i = 0; i < s.Length / 2; i++)
+            {
+                result.Append(reversed[i]);
+                result.Append(ordered[i]);
+            }
+
+            if (s.Length % 2 == 1) result.Append(reversed[s.Length / 2]);
+
+            return result.ToString();
+        }
+        public static int GrowingPlant(int UpSpeed, int DownSpeed, int DesiredHeight)
+        {
+            int result = 0;
+            while (true)
+            {
+                result++;
+                DesiredHeight -= UpSpeed;
+                if (DesiredHeight <= 0) return result;
+                DesiredHeight += DownSpeed;
+            }
+        }
         public static string StripComments(string text, string[] commentSymbols)
         {
             List<string> linesOfText = new List<string>();
@@ -208,12 +326,12 @@ namespace CodeWars
                     case "jnz":
                         if (int.TryParse(instructions[step][1], out int temp2))
                         {
-                            step = step + int.Parse(instructions[step][2]);
+                            step += int.Parse(instructions[step][2]);
                             break;
                         }
                         if (memory[instructions[step][1]] != 0)
                         {
-                            step = step + int.Parse(instructions[step][2]);
+                            step += int.Parse(instructions[step][2]);
                             break;
                         }
                         step++;
@@ -248,49 +366,51 @@ namespace CodeWars
             #region MorseDictionary
             // Originally provided by KATA
 
-            Dictionary<string, string> MorseCode = new Dictionary<string, string>();
-            // Letters
-            MorseCode.Add(".-", "A");
-            MorseCode.Add("-...", "B");
-            MorseCode.Add("-.-.", "C");
-            MorseCode.Add("-..", "D");
-            MorseCode.Add(".", "E");
-            MorseCode.Add("..-.", "F");
-            MorseCode.Add("--.", "G");
-            MorseCode.Add("....", "H");
-            MorseCode.Add("..", "I");
-            MorseCode.Add(".---", "J");
-            MorseCode.Add("-.-", "K");
-            MorseCode.Add(".-..", "L");
-            MorseCode.Add("--", "M");
-            MorseCode.Add("-.", "N");
-            MorseCode.Add("---", "O");
-            MorseCode.Add(".--.", "P");
-            MorseCode.Add("--.-", "Q");
-            MorseCode.Add(".-.", "R");
-            MorseCode.Add("...", "S");
-            MorseCode.Add("-", "T");
-            MorseCode.Add("..-", "U");
-            MorseCode.Add("...-", "V");
-            MorseCode.Add(".--", "W");
-            MorseCode.Add("-..-", "X");
-            MorseCode.Add("-.--", "Y");
-            MorseCode.Add("--..", "Z");
-            // Numbers
-            MorseCode.Add("-----", "0");
-            MorseCode.Add(".----", "1");
-            MorseCode.Add("..---", "2");
-            MorseCode.Add("...--", "3");
-            MorseCode.Add("....-", "4");
-            MorseCode.Add(".....", "5");
-            MorseCode.Add("-....", "6");
-            MorseCode.Add("--...", "7");
-            MorseCode.Add("---..", "8");
-            MorseCode.Add("----.", "9");
-            // Punctuation
+            Dictionary<string, string> MorseCode = new Dictionary<string, string>
+            {
+                // Letters
+                { ".-", "A" },
+                { "-...", "B" },
+                { "-.-.", "C" },
+                { "-..", "D" },
+                { ".", "E" },
+                { "..-.", "F" },
+                { "--.", "G" },
+                { "....", "H" },
+                { "..", "I" },
+                { ".---", "J" },
+                { "-.-", "K" },
+                { ".-..", "L" },
+                { "--", "M" },
+                { "-.", "N" },
+                { "---", "O" },
+                { ".--.", "P" },
+                { "--.-", "Q" },
+                { ".-.", "R" },
+                { "...", "S" },
+                { "-", "T" },
+                { "..-", "U" },
+                { "...-", "V" },
+                { ".--", "W" },
+                { "-..-", "X" },
+                { "-.--", "Y" },
+                { "--..", "Z" },
+                // Numbers
+                { "-----", "0" },
+                { ".----", "1" },
+                { "..---", "2" },
+                { "...--", "3" },
+                { "....-", "4" },
+                { ".....", "5" },
+                { "-....", "6" },
+                { "--...", "7" },
+                { "---..", "8" },
+                { "----.", "9" },
+                // Punctuation
 
-            // Space
-            MorseCode.Add("+", " ");
+                // Space
+                { "+", " " }
+            };
 
             #endregion
 
@@ -381,7 +501,7 @@ namespace CodeWars
         {
             List<int> sorting = new List<int>(ages);
             sorting.Sort();
-            return new int[] { sorting[sorting.Count - 1], sorting[sorting.Count - 2] };
+            return new int[] { sorting[^1], sorting[^2] };
         }
         public static string HackMyTerminal(int passLength, string machineCode)
         {
