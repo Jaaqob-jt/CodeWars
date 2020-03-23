@@ -7,9 +7,16 @@ namespace CodeWars
 
     class Kata
     {
+        enum Directions { Top, Left, Bottom, Right }; 
 
+
+        #region KataToBeFinished
         public static int[] Snail(int[][] array)
         {
+            //
+            // Do poprawki rekurencja dla wnetrza tablicy. Zewnetrzna czesc jest wpisywana do tablicy Result
+            //
+
             int[] result = new int[array.Length * array.Length];
             int arrInd = 0;
 
@@ -43,29 +50,26 @@ namespace CodeWars
                     result[arrInd] = array[i][0];
                     arrInd++;
                 }
-            }
+                int[][] passArray = new int[array.Length - 2][];
 
-            // TU TRZEBA ZAIMPLEMENTOWAĆ REKURENCJĘ I WRZUCANIE MAŁEJ TABLICY 
-            int[][] passArray = new int[array.Length - 2][];
-            try
-            {
+                // USE ARRAY.RESIZE<T>(T[], Int32) - maybe???
 
                 for (int item = 0; item < passArray.Length; item++)
                 {
+                    passArray[item] = array[item + 1].Clone() as int[];
                     Array.Copy(array[item + 1], 1, passArray[item], 0, passArray.Length);
                 }
+
                 Console.WriteLine("Gora Try'a");
                 Array.Copy(Snail(passArray), result, passArray.Length * passArray.Length);
 
-
-            } catch
+            } else
             {
                 if (array.Length % 2 == 1)
                 {
                     result[arrInd] = array[1][1];
                     Console.WriteLine("a moze bylem nizej");
                 }
-                
             }
 
             foreach (var item in result)
@@ -74,10 +78,6 @@ namespace CodeWars
             }
             return result;
         }
-
-
-
-
         public static string StringFunc(string s, long x)
         {
 
@@ -125,8 +125,62 @@ namespace CodeWars
         {
             return null;
         }
+        #endregion
 
         #region PassedKata
+        public static string Highlight(string code)
+        {
+            StringBuilder result = new StringBuilder();
+            List<string> segments = new List<string>();
+
+            if (code.Length <= 0)
+            {
+                return "";
+            }
+
+            segments.Add(code[0].ToString());
+
+            for (int i = 1; i < code.Length; i++)
+            {
+                if (code[i] == code[i - 1] || (char.IsDigit(code[i]) && char.IsDigit(code[i - 1])))
+                {
+                    segments[segments.Count - 1] = $"{segments[segments.Count - 1]}{code[i]}";
+                }
+                else
+                {
+                    segments.Add(code[i].ToString());
+                }
+            }
+            foreach (var item in segments)
+            {
+                if (char.IsDigit(item[0]))
+                {
+                    result.Append($"<span style=\"color: orange\">{item}</span>");
+                }
+                else
+                {
+                    switch (item[0])
+                    {
+                        case 'L':
+                            result.Append($"<span style=\"color: red\">{item}</span>");
+                            break;
+                        case 'R':
+                            result.Append($"<span style=\"color: green\">{item}</span>");
+                            break;
+                        case 'F':
+                            result.Append($"<span style=\"color: pink\">{item}</span>");
+                            break;
+                        case ')':
+                        case '(':
+                            result.Append(item);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            return result.ToString();
+        }
         public static int RectangleRotation(int y, int x)
         {
             double more = Math.Ceiling(y / Math.Sqrt(2)) * Math.Ceiling(x / Math.Sqrt(2)) + Math.Floor(y / Math.Sqrt(2)) * Math.Floor(x / Math.Sqrt(2));
