@@ -5,79 +5,78 @@ using System.Text;
 namespace CodeWars
 {
 
+    public class RoboScript
+    {
+        public static string Execute(string code)
+        {
+            if (code.Length < 1) return "*";
+            StringBuilder result = new StringBuilder();
+            List<Tuple<string, int>> segments = new List<Tuple<string, int>>();
+         //   segments.Add("F", 1 ));
+
+
+            return null;
+        }
+        public static string Highlight(string code)
+        {
+            StringBuilder result = new StringBuilder();
+            List<string> segments = new List<string>();
+
+            if (code.Length <= 0) return "";
+
+            segments.Add(code[0].ToString());
+
+            for (int i = 1; i < code.Length; i++)
+            {
+                if (code[i] == code[i - 1] || (char.IsDigit(code[i]) && char.IsDigit(code[i - 1])))
+                {
+                    segments[segments.Count - 1] = $"{segments[segments.Count - 1]}{code[i]}";
+                }
+                else
+                {
+                    segments.Add(code[i].ToString());
+                }
+            }
+            foreach (var item in segments)
+            {
+                if (char.IsDigit(item[0]))
+                {
+                    result.Append($"<span style=\"color: orange\">{item}</span>");
+                }
+                else
+                {
+                    switch (item[0])
+                    {
+                        case 'L':
+                            result.Append($"<span style=\"color: red\">{item}</span>");
+                            break;
+                        case 'R':
+                            result.Append($"<span style=\"color: green\">{item}</span>");
+                            break;
+                        case 'F':
+                            result.Append($"<span style=\"color: pink\">{item}</span>");
+                            break;
+                        case ')':
+                        case '(':
+                            result.Append(item);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            return result.ToString();
+        }
+    }
+
     class Kata
     {
-        enum Directions { Top, Left, Bottom, Right }; 
+
+
 
 
         #region KataToBeFinished
-        public static int[] Snail(int[][] array)
-        {
-            //
-            // Do poprawki rekurencja dla wnetrza tablicy. Zewnetrzna czesc jest wpisywana do tablicy Result
-            //
 
-            int[] result = new int[array.Length * array.Length];
-            int arrInd = 0;
-
-            array[0].CopyTo(result, arrInd);
-            arrInd = array.Length;
-
-            int[] tempArray = new int[array.Length];
-            array[^1].CopyTo(tempArray, 0);
-            Array.Reverse(tempArray);
-
-
-            if (array.Length > 1)
-            {
-                for (int i = 1; i < array.Length - 1; i++)
-                {
-                    Console.WriteLine($"-- In Loop -- {array[^1][i]} ");
-                    result[arrInd] = array[i][array.Length - 1];
-                    arrInd++;
-                }
-            }
-
-            tempArray.CopyTo(result, arrInd);
-            arrInd += tempArray.Length;
-            Console.WriteLine($"Array index is: {arrInd}");
-
-            if (array.Length > 1)
-            {
-                for (int i = array.Length - 2; i > 0 ; i--)
-                {
-                    Console.WriteLine($"-- In Loop -- {array[^1][i]} ");
-                    result[arrInd] = array[i][0];
-                    arrInd++;
-                }
-                int[][] passArray = new int[array.Length - 2][];
-
-                // USE ARRAY.RESIZE<T>(T[], Int32) - maybe???
-
-                for (int item = 0; item < passArray.Length; item++)
-                {
-                    passArray[item] = array[item + 1].Clone() as int[];
-                    Array.Copy(array[item + 1], 1, passArray[item], 0, passArray.Length);
-                }
-
-                Console.WriteLine("Gora Try'a");
-                Array.Copy(Snail(passArray), result, passArray.Length * passArray.Length);
-
-            } else
-            {
-                if (array.Length % 2 == 1)
-                {
-                    result[arrInd] = array[1][1];
-                    Console.WriteLine("a moze bylem nizej");
-                }
-            }
-
-            foreach (var item in result)
-            {
-                Console.Write($"{item.ToString()} | ");
-            }
-            return result;
-        }
         public static string StringFunc(string s, long x)
         {
 
@@ -128,58 +127,88 @@ namespace CodeWars
         #endregion
 
         #region PassedKata
-        public static string Highlight(string code)
+        public static bool comp(int[] a, int[] b)
         {
-            StringBuilder result = new StringBuilder();
-            List<string> segments = new List<string>();
-
-            if (code.Length <= 0)
+            try
             {
-                return "";
-            }
-
-            segments.Add(code[0].ToString());
-
-            for (int i = 1; i < code.Length; i++)
-            {
-                if (code[i] == code[i - 1] || (char.IsDigit(code[i]) && char.IsDigit(code[i - 1])))
+                if (a.Length < 1 || b.Length < 1 || a.Length != b.Length)
                 {
-                    segments[segments.Count - 1] = $"{segments[segments.Count - 1]}{code[i]}";
-                }
-                else
-                {
-                    segments.Add(code[i].ToString());
+                    if (a.Length == 0 && b.Length == 0) return true;
+                    return false;
                 }
             }
-            foreach (var item in segments)
+            catch { return false; }
+
+            HashSet<int> aArray = new HashSet<int>(a);
+            HashSet<int> bArray = new HashSet<int>(b);
+
+            if (aArray.Count != bArray.Count) return false;
+
+            foreach (int item in aArray) if (!bArray.Contains(item * item)) return false;
+
+            if (a.Length != aArray.Count)
             {
-                if (char.IsDigit(item[0]))
+                foreach (var item in a)
                 {
-                    result.Append($"<span style=\"color: orange\">{item}</span>");
-                }
-                else
-                {
-                    switch (item[0])
+                    if (Array.Exists(b, x => x == item * item))
                     {
-                        case 'L':
-                            result.Append($"<span style=\"color: red\">{item}</span>");
-                            break;
-                        case 'R':
-                            result.Append($"<span style=\"color: green\">{item}</span>");
-                            break;
-                        case 'F':
-                            result.Append($"<span style=\"color: pink\">{item}</span>");
-                            break;
-                        case ')':
-                        case '(':
-                            result.Append(item);
-                            break;
-                        default:
-                            break;
+                        b[Array.FindIndex(b, x => x == item * item)] = 0;
                     }
+                    else { return false; }
                 }
             }
-            return result.ToString();
+            return true;
+        }
+        public static int[] Snail(int[][] array)
+        {
+            if (array.Length == 1) return array[0];
+
+            int[] result = new int[array.Length * array.Length];
+            int arrInd = 0;
+
+            array[0].CopyTo(result, arrInd);
+            arrInd = array.Length;
+
+            int[] tempArray = new int[array.Length];
+            array[^1].CopyTo(tempArray, 0);
+            Array.Reverse(tempArray);
+
+            if (array.Length > 1)
+            {
+                for (int i = 1; i < array.Length - 1; i++)
+                {
+                    result[arrInd] = array[i][array.Length - 1];
+                    arrInd++;
+                }
+            }
+
+            tempArray.CopyTo(result, arrInd);
+            arrInd += tempArray.Length;
+
+            if (array.Length > 1)
+            {
+                for (int i = array.Length - 2; i > 0; i--)
+                {
+                    result[arrInd] = array[i][0];
+                    arrInd++;
+                }
+                int[][] passArray = new int[array.Length - 2][];
+
+                for (int item = 0; item < passArray.Length; item++)
+                {
+                    passArray[item] = new ArraySegment<int>(array[item + 1], 1, passArray.Length).ToArray();
+                }
+                if (passArray.Length > 0)
+                {
+                    Array.Copy(Snail(passArray), 0, result, arrInd, passArray.Length * passArray.Length);
+                    arrInd++;
+                }
+            }
+            else
+            {
+                if (array.Length % 2 == 1) result[arrInd] = array[1][1];
+            }
+            return result;
         }
         public static int RectangleRotation(int y, int x)
         {
@@ -398,7 +427,7 @@ namespace CodeWars
             return memory;
         }
         public static int BreakChocolate(int n, int m) => m * n != 0 ? ((m * n) - 1) : 0;
-        public static int find_it(int[] seq)
+        public static int FindIt(int[] seq)
         {
             List<int> sequence = new List<int>(seq);
             sequence.Sort();
