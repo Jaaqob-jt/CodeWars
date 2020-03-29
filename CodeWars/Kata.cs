@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CodeWars
@@ -75,8 +76,10 @@ namespace CodeWars
 
 
 
-        #region KataToBeFinished
 
+
+
+        #region KataToBeFinished
         public static string StringFunc(string s, long x)
         {
 
@@ -127,6 +130,75 @@ namespace CodeWars
         #endregion
 
         #region PassedKata
+        public static int[] ArrayDiff(int[] a, int[] b)
+        {
+            List<int> original = new List<int>(a);
+            foreach (int item in b.ToHashSet<int>()) original.RemoveAll(x => x == item);
+
+            foreach (int item in original) Console.WriteLine(item);
+            return original.ToArray();
+        }
+        public static string Diamonds(int n)
+        {
+            if (n % 2 == 0 || n < 1) return null;
+            StringBuilder diamond = new StringBuilder();
+            string text = "";
+            int left = n / 2;
+            int right = 1;
+
+            for (int i = 0; i < n; i++)
+            {
+                if (i < n / 2)
+                {
+                    diamond.AppendLine($"{text.PadLeft(left)}{text.PadRight(right, '*')}");
+                    left--;
+                    right += 2;
+                }
+                else
+                {
+                    diamond.AppendLine($"{text.PadLeft(left)}{text.PadRight(right, '*')}");
+                    left++;
+                    right -= 2;
+                }
+            }
+
+            Console.WriteLine(diamond.ToString());
+            return diamond.ToString();
+        }
+        public static string Abbreviate(string input)
+        {
+            if (input.Length < 1) return null;
+            string delimiters = "";
+            string result = input;
+
+            foreach (char item in input) if (!char.IsLetter(item)) delimiters = $"{delimiters}{item}";
+
+            foreach (var item in input.Split(delimiters.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                if (item.Length > 3) result = result.Replace(item, $"{item[0]}{item.Length - 2}{item[item.Length - 1]}");
+
+            return result;
+        }
+        public static string Rgb(int r, int g, int b) => $"{Math.Max(0, Math.Min(255, r)):X}{Math.Max(0, Math.Min(255, g)):X}{Math.Max(0, Math.Min(255, b)):X}";
+        public static string[] Capitalize(string s)
+        {
+            StringBuilder upperFirst = new StringBuilder();
+            StringBuilder lowerFirst = new StringBuilder();
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    upperFirst.Append(s.ToUpper()[i]);
+                    lowerFirst.Append(s.ToLower()[i]);
+                }
+                else
+                {
+                    upperFirst.Append(s.ToLower()[i]);
+                    lowerFirst.Append(s.ToUpper()[i]);
+                }
+            }
+            return new string[] { upperFirst.ToString(), lowerFirst.ToString() };
+        }
         public static bool comp(int[] a, int[] b)
         {
             try
