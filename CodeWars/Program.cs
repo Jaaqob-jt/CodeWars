@@ -9,7 +9,7 @@ namespace CodeWars
         {
             User steve = new User("Steve");
             Console.WriteLine(steve.ToString());
-            User.incProgres(steve, 123);
+            steve.incProgress(123);
 
             Console.WriteLine(steve.ToString());
 
