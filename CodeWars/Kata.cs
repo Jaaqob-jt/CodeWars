@@ -76,9 +76,6 @@ namespace CodeWars
 
 
 
-
-
-
         #region KataToBeFinished
         public static string StringFunc(string s, long x)
         {

@@ -7,7 +7,11 @@ namespace CodeWars
     {
         static void Main(string[] args)
         {
-            Kata.ArrayDiff(new int[] { 1, 2, 2 }, new int[] { 1 });
+            User steve = new User("Steve");
+            Console.WriteLine(steve.ToString());
+            User.incProgres(steve, 123);
+
+            Console.WriteLine(steve.ToString());
 
         }
     }
