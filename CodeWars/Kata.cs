@@ -72,11 +72,32 @@ namespace CodeWars
 
     class Kata
     {
+
+
+
+
+        public static int GetUnique(IEnumerable<int> numbers)
+        {
+            int flag = 0;
+            IEnumerable<int> distinctValues = numbers.Distinct();
+            for (int i = 0; i < 2; i++){
+                if (numbers.ElementAt(i) == distinctValues.First())
+                {
+                    flag++;
+                } 
+            }
+            if (flag > 1) 
+            {
+                return distinctValues.Last();
+            }
+            return distinctValues.First();
+        }
         public static char FindMissingLetter(char[] array)
         {
             int prevIndex = array[0] - 64;
             foreach (var item in array)
             {
+                Console.WriteLine($"Item = {item}, {(int)item};\tItem+1 = {Convert.ToChar(item+1)}, {(int)item+1}" );
                 if ((item - 64) - prevIndex > 1)
                 {
                     return Convert.ToChar(item+1);
