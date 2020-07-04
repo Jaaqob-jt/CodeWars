@@ -7,12 +7,14 @@ namespace CodeWars
     {
         static void Main(string[] args)
         {
-            User steve = new User("Steve");
-            Console.WriteLine(steve.ToString());
-            steve.incProgress(123);
 
-            Console.WriteLine(steve.ToString());
+            Console.WriteLine("Testowanko");
 
+            while (long.TryParse(Console.ReadLine(), out long temp)){
+
+            Console.WriteLine("Resulted in: " + Kata.DigitalRoot(temp));
+            } 
+                
         }
     }
 }

@@ -72,8 +72,18 @@ namespace CodeWars
 
     class Kata
     {
-
-
+        public static char FindMissingLetter(char[] array)
+        {
+            int prevIndex = array[0] - 64;
+            foreach (var item in array)
+            {
+                if ((item - 64) - prevIndex > 1)
+                {
+                    return Convert.ToChar(item+1);
+                }
+            }
+            return ' ';
+        }
 
 
         #region KataToBeFinished
@@ -127,6 +137,59 @@ namespace CodeWars
         #endregion
 
         #region PassedKata
+
+         public static int Find(int[] integers)
+        {
+            List<int> oddNumbers = new List<int>();
+            List<int> evenNumbers = new List<int>();
+            foreach (int item in integers)
+            {
+                if (item % 2 == 0)
+                {
+                    evenNumbers.Add(item);   
+                } else 
+                {
+                    oddNumbers.Add(item);
+                }
+                if (oddNumbers.Count == 1 & evenNumbers.Count > 1){
+                    return oddNumbers.First();
+                }
+                if (evenNumbers.Count == 1 & oddNumbers.Count > 1){
+                    return evenNumbers.First();
+                }
+            }
+            return -1;
+        }
+        public static int DigitalRoot(long n)
+        {
+            int result = 0;
+            if (n.ToString().Count() <= 1)
+            {
+                result = (int)n;
+            } else 
+            {
+                long pass = 0;
+                foreach (char item in n.ToString()){
+                    int.TryParse(item.ToString(), out int temp);
+                    pass = pass + temp; 
+                }
+                result = DigitalRoot(pass);
+            }
+            Console.Write(result + " ");
+            return result;
+        }
+         public static int MultiOf3Or5(int value)
+        {
+            int result = 0;
+            for (int i = 1; i < value; i++)
+            {
+                if (i % 3 == 0 || i % 5 == 0)
+                {
+                    result += i;
+                }
+            }
+            return result;
+        }
         public static int[] ArrayDiff(int[] a, int[] b)
         {
             List<int> original = new List<int>(a);
