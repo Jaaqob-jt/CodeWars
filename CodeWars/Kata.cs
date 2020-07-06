@@ -73,37 +73,40 @@ namespace CodeWars
     class Kata
     {
 
-
-
-
-        public static int GetUnique(IEnumerable<int> numbers)
+        public static int FindEvenIndex(int[] arr)
         {
-            int flag = 0;
-            IEnumerable<int> distinctValues = numbers.Distinct();
-            for (int i = 0; i < 2; i++){
-                if (numbers.ElementAt(i) == distinctValues.First())
-                {
-                    flag++;
-                } 
-            }
-            if (flag > 1) 
+            int leftSum = 0;
+            int rightSum = arr.Sum();
+            int index = 0;
+            foreach (int item in arr)
             {
-                return distinctValues.Last();
+                if (leftSum == rightSum) return index;
+                leftSum =+ item;
+                rightSum =- item;
+                index++;
             }
-            return distinctValues.First();
+            return -1;
         }
-        public static char FindMissingLetter(char[] array)
+
+        public static string Order(string words)
         {
-            int prevIndex = array[0] - 64;
-            foreach (var item in array)
+        StringBuilder result = new StringBuilder();
+        Dictionary<int, string> wordPairs = new Dictionary<int, string>();
+        string[] splitWords = words.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        foreach (string item in splitWords)
+        {
+            if(int.TryParse(item.Where(char.IsDigit).First().ToString(), out int indexer)) 
             {
-                Console.WriteLine($"Item = {item}, {(int)item};\tItem+1 = {Convert.ToChar(item+1)}, {(int)item+1}" );
-                if ((item - 64) - prevIndex > 1)
-                {
-                    return Convert.ToChar(item+1);
-                }
+                wordPairs.Add(indexer, item);
             }
-            return ' ';
+        }
+        var list = wordPairs.Keys.ToList();
+        list.Sort();
+        foreach (var item in list)
+        {
+            result.Append($"{wordPairs.GetValueOrDefault(item)} ");
+        }
+            return result.ToString().TrimEnd();
         }
 
 
@@ -158,7 +161,55 @@ namespace CodeWars
         #endregion
 
         #region PassedKata
+        public static bool ValidParentheses(string input)
+        {
+            Stack<char> Nawiasy = new Stack<char>();
+            foreach (char item in input)
+            {
+                switch (item)
+                {
+                case '(':
+                    Nawiasy.Push(item);
+                break;
+                case ')':
+                    if (!Nawiasy.TryPop(out char close)) return false;    
+                break;
+                default: break;
+                }
+            }
+            if (Nawiasy.Count == 0) return true;
+            return false;
+        }
 
+        public static int GetUnique(IEnumerable<int> numbers)
+        {
+            int flag = 0;
+            IEnumerable<int> distinctValues = numbers.Distinct();
+            for (int i = 0; i < 2; i++){
+                if (numbers.ElementAt(i) == distinctValues.First())
+                {
+                    flag++;
+                } 
+            }
+            if (flag > 1) 
+            {
+                return distinctValues.Last();
+            }
+            return distinctValues.First();
+        }
+        public static char FindMissingLetter(char[] array)
+    {
+        int prevIndex = array[0] - 64;
+        foreach (var item in array)
+        {
+            Console.WriteLine($"Item = {item}, {(int)item};\tItem+1 = {Convert.ToChar(item+1)}, {(int)item+1}" );
+            if ((item - 64) - prevIndex > 1)
+            {
+                return Convert.ToChar(item+1);
+            }
+        }
+        return ' ';
+    }
          public static int Find(int[] integers)
         {
             List<int> oddNumbers = new List<int>();
