@@ -73,56 +73,19 @@ namespace CodeWars
     class Kata
     {
 
-        public static int FindEvenIndex(int[] arr)
-        {
-            int leftSum = 0;
-            int rightSum = arr.Sum();
-            int index = 0;
-            foreach (int item in arr)
-            {
-                if (leftSum == rightSum) return index;
-                leftSum =+ item;
-                rightSum =- item;
-                index++;
-            }
-            return -1;
-        }
 
-        public static string Order(string words)
-        {
-        StringBuilder result = new StringBuilder();
-        Dictionary<int, string> wordPairs = new Dictionary<int, string>();
-        string[] splitWords = words.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        foreach (string item in splitWords)
-        {
-            if(int.TryParse(item.Where(char.IsDigit).First().ToString(), out int indexer)) 
-            {
-                wordPairs.Add(indexer, item);
-            }
-        }
-        var list = wordPairs.Keys.ToList();
-        list.Sort();
-        foreach (var item in list)
-        {
-            result.Append($"{wordPairs.GetValueOrDefault(item)} ");
-        }
-            return result.ToString().TrimEnd();
-        }
 
 
         #region KataToBeFinished
         public static string StringFunc(string s, long x)
         {
-
             // This is working and returning good values, but! input data is to big to process this way. Need to optimize.
-
 
             StringBuilder result = new StringBuilder();
             string text = s;
             long step = 0;
             Console.WriteLine($"Step: {step} \t= {text}");
             List<string> possibilities = new List<string>();
-
             while (step < x)
             {
                 char[] ordered = text.ToCharArray();
@@ -161,6 +124,41 @@ namespace CodeWars
         #endregion
 
         #region PassedKata
+
+        public static int FindEvenIndex(int[] arr)
+        {
+            int leftSum = 0;
+            int rightSum = arr.Sum();
+            int index = 0;
+            foreach (int item in arr)
+            {
+                if (leftSum == rightSum) return index;
+                leftSum =+ item;
+                rightSum =- item;
+                index++;
+            }
+            return -1;
+        }
+        public static string Order(string words)
+        {
+        StringBuilder result = new StringBuilder();
+        Dictionary<int, string> wordPairs = new Dictionary<int, string>();
+        string[] splitWords = words.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        foreach (string item in splitWords)
+        {
+            if(int.TryParse(item.Where(char.IsDigit).First().ToString(), out int indexer)) 
+            {
+                wordPairs.Add(indexer, item);
+            }
+        }
+        var list = wordPairs.Keys.ToList();
+        list.Sort();
+        foreach (var item in list)
+        {
+            result.Append($"{wordPairs.GetValueOrDefault(item)} ");
+        }
+            return result.ToString().TrimEnd();
+        }
         public static bool ValidParentheses(string input)
         {
             Stack<char> Nawiasy = new Stack<char>();
@@ -180,7 +178,6 @@ namespace CodeWars
             if (Nawiasy.Count == 0) return true;
             return false;
         }
-
         public static int GetUnique(IEnumerable<int> numbers)
         {
             int flag = 0;
